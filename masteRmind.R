@@ -91,5 +91,81 @@ request_input = function(num_guess = 1) {
 }
   
 # Response to input error: ----------------------------------------------------
+print_error = function(input, n){
+  if( input$error_free ){
+    cat('Why did this get called! Programmer error.\n')
+  } else {
+    cat('User error - provide constructive feedback!\n')
+    
+    # Too few
+    if( input$too_few ) {
+      err_few = sprintf(
+        "Too many elements in guess. Please try again with %i elements separated by '%s'!\n", n, sep )
+      cat(err_few)
+    }
+    
+    # Too many
+    if( input$too_many ) {
+      err_many = sprintf(
+        "Too many elements in guess. Please try again with %i elements separated by '%s'!\n", 
+        n, sep )
+      cat(err_many)
+    }
+    
+  }
+}
 
-# Standard feedback: 
+# Standard feedback: ---------------------------------------------------------
+feedback = function( guesses, results, secret, n) {
+  turn = length(guesses)
+
+  if( results[[turn]]$n_exact == n ) {
+    win_msg = sprintf('Congratulations! You guessed the secret code: %s.\n', secret)
+    cat(win_msg)
+    return(TRUE)
+  } else {
+    for(i in 1:turn) {
+      msg = sprintf('%i - %s: exact = %i, colors = %i.\n', i, guesses[[i]], 
+                    results[[i]]$n_exact, results[[i]]$n_color )
+      cat(msg)
+    }
+    return(FALSE)
+  }
+}
+
+# Start up message: ----------------------------------------------------------
+
+# Game skeleton: --------------------------------------------------------------
+play_mastermind = function(n = 4, dict = NULL, max_turns = 10, repeats = FALSE) 
+{
+  # Initialize
+  turn = 0
+  win = FALSE
+  secret = gen_code(n, dict, repeats, sep = ', ')
+  
+  while( turn <= max_turns && !win ) {
+     input = request_input()
+    
+     input = clean_input(input, n, sep, dict)
+     
+     if( input$error_free ) {
+       result = check_code(input$guess)
+       win = feedback(result)
+       
+       turn = turn + 1
+       if(turn <= max_turns) {
+         request_input(turn)
+       }
+       
+     } else {
+       print_error(input)
+     }
+  }
+  
+  if( win ) return()
+  if( turn > max_turns ){
+    lose_msg = sprintf('Mastermind wins! The secret code was:\n %s.\n\n', secret)
+    cat(lose_msg)
+  }
+}
+
