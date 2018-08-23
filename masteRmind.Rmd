@@ -178,6 +178,9 @@ after each guess.
 some basic gameplay instructions when the game starts. Call it from
 within your `play_mastermind` function.
 
+19. At the start of your while loop in `play_mastermind`, 
+check if the guess is 'q' and quit if so. Add a note about this as part of
+feedback after invalid input.
 
 ### Challenge
 
