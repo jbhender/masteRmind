@@ -41,6 +41,8 @@ check_code = function(guess, secret, n = 4, sep = ', ') {
 # Translate and verify user input: --------------------------------------------
 clean_input = function(guess, n = 4, sep = ', ', dict = std_dict) {
   
+  if(guess %in% c('q', 'quit', 'Quit')) stop('Goodbye!\n')
+  
   # Split guess into a vector
   guess = stringr::str_split_fixed(guess, pattern = sep, n = n)
   
@@ -72,7 +74,7 @@ clean_input = function(guess, n = 4, sep = ', ', dict = std_dict) {
     }
   }
   
-  list( guess = guess, #cleaned guess
+  list( guess = paste(guess, collapse=sep), #cleaned guess
         too_few = too_few, 
         too_many = too_many,
         not_in_dict = not_in_dict,
@@ -95,8 +97,7 @@ print_error = function(input, n){
   if( input$error_free ){
     cat('Why did this get called! Programmer error.\n')
   } else {
-    cat('User error - provide constructive feedback!\n')
-    
+
     # Too few
     if( input$too_few ) {
       err_few = sprintf(
@@ -111,7 +112,14 @@ print_error = function(input, n){
         n, sep )
       cat(err_many)
     }
-    
+  
+    if( any(input$not_in_dict) ){
+      nid = which(input$not_in_dict)
+      guess = stringr::str_split_fixed(guess, pattern = sep, n = n)
+      msg = sprintf('Not found in dictionary: %s.\n',
+                    paste(guess[nid], collapse=", "))
+      cat(msg)
+    }  
   }
 }
 
@@ -134,38 +142,52 @@ feedback = function( guesses, results, secret, n) {
 }
 
 # Start up message: ----------------------------------------------------------
-
+start_msg = function(n, dict, max_turns){
+  msg = sprintf("@<##>@ - Guess my secret code using %i of the following colors: %s.\n",
+          n, paste(dict, collapse = sep))
+  cat(msg)
+  
+  msg = sprintf('You win if you unlock the vault in less than %i guesses.\n', 
+                max_turns)
+  cat(msg)
+}
 # Game skeleton: --------------------------------------------------------------
 play_mastermind = function(n = 4, dict = NULL, max_turns = 10, repeats = FALSE) 
 {
   # Initialize
-  turn = 0
+  sep = ', '
+  turn = 1
   win = FALSE
   secret = gen_code(n, dict, repeats, sep = ', ')
+ 
+  start_msg(n, dict, max_turns)
+
+  guesses = results = list()
   
   while( turn <= max_turns && !win ) {
-     input = request_input()
+     input = request_input(turn)
     
      input = clean_input(input, n, sep, dict)
-     
+
      if( input$error_free ) {
-       result = check_code(input$guess)
-       win = feedback(result)
+       guesses[[turn]] = input$guess
+       
+       results[[turn]] = check_code(input$guess, secret)
+
+       win = feedback(guesses, results, secret, n)
        
        turn = turn + 1
-       if(turn <= max_turns) {
-         request_input(turn)
-       }
-       
      } else {
        print_error(input)
      }
   }
   
-  if( win ) return()
+  if( win ) return(invisible())
   if( turn > max_turns ){
     lose_msg = sprintf('Mastermind wins! The secret code was:\n %s.\n\n', secret)
     cat(lose_msg)
+    return(invisible())
   }
 }
 
+play_mastermind(4, std_dict) 
