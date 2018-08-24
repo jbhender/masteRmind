@@ -115,16 +115,25 @@ split_guess = function(guess, sep = ', '){
 
 ### Task 3
 
-*In this task you will use your knowledge of relational operators and 
-conditions while building a function to validate player input.*
+*In this task you will use your knowledge of Boolean operators 
+while building a function to evaluate player input.*
 
 11. Write a function `check_code` with arguments `guess`, `secret`, and
 defaults `n = 4` and `sep = ', '` that provides user feedback as a list
 with slots `n_exact` giving the number of exact mathches and `n_colors` giving
 the number of matched colors. *Hint: for correct colors see `help( intersect() )`*.
 
-12. Write a function `feedback` that accept the output from `check_code` and 
-prints an instructive message.
+[Solution](./masteRmind_task3.R)
+
+### Task 4
+
+*In this task you will used conditionals to write functions that provide feedback
+  and validate player input. *
+
+12. Write a function `feedback` that accept the output from `check_code` as
+`result` and the secret code as `secret` and  prints an instructive message.
+Set the return value of your feedback to `TRUE` if the person wins the game
+and `FALSE` otherwise. 
 
 13. Write a body for the function `clean_input` that:
   - Validates that the length of the guess is `n` and flags if the guess 
@@ -152,7 +161,9 @@ clean_input = function(guess, n = 4, sep = ', ', dict = std_dict) {
 }
 ```
 
-### Task 4
+[Solution](./masteRmind_task4.R)
+
+### Task 5
 
 *In this task you will use a for loop to replace any standard abbreviations
 in a player's guess with the corresponding color. You will then use a while
@@ -162,12 +173,12 @@ loop to put the game together.*
 any abbreviations in the users guess (i.e. names of std_dicts) with their values.
 *Hint: Use a `for` loop iterating over the indices of the guess after splitting.*
 
-### Task 5
-
 15. Write a function `play_mastermind` that starts a new game of mastermind when called. Use a 
 `while` loop to request user input for succesive rounds until `max_turns = 10` is reached.
 
 *Hints: Refer to the program flow chart under Overview.*
+
+[Solution](./masteRmind_task5.R)
 
 ### Task 6
 *These are not essential, but are good practice if we have time remaining.*
@@ -186,6 +197,8 @@ within your `play_mastermind` function.
 19. At the start of your while loop in `play_mastermind`, 
 check if the guess is 'q' and quit if so. Add a note about this as part of
 feedback after invalid input.
+
+[Solution](./masteRmind.R#)
 
 ### Challenge
 
