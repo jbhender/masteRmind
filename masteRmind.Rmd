@@ -70,14 +70,17 @@ project goal, your name, and today's date.
    Red, Green, Blue, Yellow, Gold, Orange, Black, and White.
 4. Does your object have names? Set the names attribute of `std_dict` using
 the following abbrevations for the colors above: R, Gr, Bu, Y, Go, O, Ba, W.
-5. What is the class of your object and how would you check it?
+5. What is the class of your object and how would you check it? What is its length?
+
+[Solution](./masteRmind_task1.R)
 
 ### Task 2
 
-6. Write a function `gen_code(n, dict, sep = ', ')` that generates a secret code
-of length `n` from a dictionary of colors `dict`.  *Hint: use `sample()` and `std_dict`.*
+6. Write a function `gen_code(n, dict)` that generates a secret code
+of length `n` from a dictionary of colors `dict`. Test your function using
+`n = 4` and `std_dict`. *Hint: use `sample()`.*
 
-7. Write a function `request_input()` with no inputs that prints a string prompting
+7. Write a function `request_input()` with no paramters that prints a string prompting
    the player for input, waits to recieve that input, and then returns
    the input recieved.
    
@@ -107,6 +110,8 @@ split_guess = function(guess, sep = ', '){
 }
 
 ```
+
+[Solution](./masteRmind_task2.R)
 
 ### Task 3
 
@@ -157,7 +162,7 @@ loop to put the game together.*
 any abbreviations in the users guess (i.e. names of std_dicts) with their values.
 *Hint: Use a `for` loop iterating over the indices of the guess after splitting.*
 
-## Task 5
+### Task 5
 
 15. Write a function `play_mastermind` that starts a new game of mastermind when called. Use a 
 `while` loop to request user input for succesive rounds until `max_turns = 10` is reached.

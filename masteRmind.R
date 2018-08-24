@@ -16,7 +16,7 @@ std_dict = c( R='Red', Gr='Green', Bu='Blue', Y='Yellow',
 # based on the R function "sample"
 # sep - how to separate words in the code
 
-gen_code = function(n = 4, dict=NULL, repeats=FALSE, sep=', ') {
+gen_code = function(n, dict=NULL, repeats=FALSE) {
   if( is.null(dict) ) {
     dict = c( R='Red', Gr='Green', Bu='Blue', Y='Yellow',
               Go='Gold', O='Orange', Ba='Black', W='White' )
@@ -25,8 +25,27 @@ gen_code = function(n = 4, dict=NULL, repeats=FALSE, sep=', ') {
   #paste( sample(dict, n, replace = repeats), collapse = sep)
   sample(dict, n, replace = repeats)
 }
-#gen_code()
 
+# Test
+gen_code(4, std_dict)
+
+# Recieve user input: ---------------------------------------------------------
+request_input = function(num_guess = 1) {
+  
+  # Prompt user
+  request_str = sprintf('Plase enter guess #%i:\n', num_guess)
+  cat(request_str)
+  
+  # Request input
+  guess = readline()
+  
+  # Return input
+  guess
+}
+
+x = request_input() 
+Blue, Orange, Green, Red
+x
 # Split a user input guess into pieces: --------------------------------------- 
 split_guess = function(guess, sep = ', '){
   stringr::str_split(guess, pattern = sep)[[1]]
@@ -102,19 +121,7 @@ clean_input( 'R, Gr, Bu, Ba, XX')
 clean_input( 'R, Green, Blue, Gold', n = 4, sep = ', ', dict = std_dict)
 clean_input( 'Blue, White, Yellow, Gold')
 
-# Recieve user input: ---------------------------------------------------------
-request_input = function(num_guess = 1) {
-  request_str = sprintf('Plase enter guess #%i:\n', num_guess)
-  cat(request_str)
-  
-  guess = readline()
-  
-  guess
-}
 
-x = request_input() 
-Blue, Orange, Green, Red
-x
 
 # Response to input error: ----------------------------------------------------
 print_error = function(input, n, sep = ', '){
@@ -192,7 +199,7 @@ play_mastermind = function(n = 4, dict = NULL, max_turns = 10, repeats = FALSE,
   quit = FALSE
   turn = 1
   win = FALSE
-  secret = gen_code(n, dict, repeats, sep)
+  secret = gen_code(n, dict, repeats)
 
   # Storage
   guesses = results = list()
