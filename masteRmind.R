@@ -46,6 +46,7 @@ request_input = function(num_guess = 1) {
 x = request_input() 
 Blue, Orange, Green, Red
 x
+
 # Split a user input guess into pieces: --------------------------------------- 
 split_guess = function(guess, sep = ', '){
   stringr::str_split(guess, pattern = sep)[[1]]
@@ -65,6 +66,32 @@ check_code = function(guess, secret, n = 4, sep = ', ') {
 #check_code( paste(gen_code(), collapse=', ' ), secret = gen_code() )
 check_code( c('Blue', 'Orange', 'Red', 'Yellow'),
             secret = c('Blue', 'Yellow', 'Gold', 'Green'))
+
+
+# Standard feedback: ---------------------------------------------------------
+feedback = function( guesses, results, secret, n, sep=', ') {
+  turn = length(guesses)
+  
+  if( results[[turn]]$n_exact == n ) {
+    win_msg = sprintf('@<##>@ - Congratulations! You guessed the secret code: %s.\n', 
+                      paste(secret, collapse=sep))
+    cat(win_msg)
+    return(TRUE)
+  } else {
+    
+    for(i in 1:turn) {
+      msg = sprintf('%i - %s: exact = %i, colors = %i.\n', i, guesses[[i]], 
+                    results[[i]]$n_exact, results[[i]]$n_color )
+      cat(msg)
+    }
+    
+    return(FALSE)
+  }
+}
+feedback( guesses = list( c('Blue, White, Yellow, Gold') ),
+          results = list( list(n_exact = 4, n_colors = 4) ),
+          secret = c('Blue', 'White', 'Yellow', 'Gold'),
+          n = 4)
 
 # Translate and verify user input: --------------------------------------------
 clean_input = function(guess, n = 4, sep = ', ', dict = std_dict) {
